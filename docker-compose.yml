@@ -1,14 +1,9 @@
-version: "3.9"
-
 services:
-  app:
-    build:
-      context: .
-      args:
-        - DEV=true
+  web:
+    build: .
+    # command: python manage.py runserver 0.0.0.0:8000
+    # command: uwsgi --http :8000 --module server.wsgi
+    volumes:
+      - .:/code
     ports:
       - "8000:8000"
-    volumes:
-      - ./app:/app
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"

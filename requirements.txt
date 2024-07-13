@@ -1,1 +1,2 @@
-Django==5.0
+Django==5.0.7
+uwsgi==2.0.26

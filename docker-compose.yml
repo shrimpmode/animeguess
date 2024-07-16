@@ -1,9 +1,16 @@
 services:
   web:
     build: .
-    # command: python manage.py runserver 0.0.0.0:8000
-    # command: uwsgi --http :8000 --module server.wsgi
+    command: uwsgi --http :8000 --module app.wsgi --master --processes 4 --threads 2
     volumes:
       - .:/code
     ports:
       - "8000:8000"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/sites-available/default.conf
+    depends_on:
+      - web

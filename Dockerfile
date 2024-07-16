@@ -1,15 +1,20 @@
-# syntax=docker/dockerfile:1
-FROM python:3.12.4-alpine3.20
-ENV PYTHONDONTWRITEBYTECODE=1
+FROM python:3.10-alpine
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTHWRITEBYTECODE=1
 WORKDIR /code
 COPY requirements.txt /code/
 
+RUN apk add --no-cache gcc musl-dev linux-headers 
 
-RUN apk add --no-cache gcc musl-dev linux-headers
-RUN pip install -r requirements.txt
+
+RUN pip install --upgrade pip && \
+  pip install -r requirements.txt
 
 COPY . /code/
 
-RUN chmod +x ./scripts/run.sh
-RUN ["./scripts/run.sh"]
+RUN chmod +x /code/entrypoint.sh
+
+EXPOSE 8000
+
+
+ENTRYPOINT ["/code/entrypoint.sh"]

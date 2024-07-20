@@ -1,16 +1,25 @@
 services:
   web:
-    build: .
-    command: uwsgi --http :8000 --module app.wsgi --master --processes 4 --threads 2
+    build:
+      context: django
+    restart: always
     volumes:
-      - .:/code
+      - ./django:/code
     ports:
-      - "8000:8000"
-  nginx:
-    image: nginx:latest
+        - "8000:8000"
+    networks:
+      - backnet
+      - frontnet
+    command: python manage.py runserver 0.0.0.0:8000
+  proxy:
+    build: proxy
+    restart: always
     ports:
       - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/sites-available/default.conf
     depends_on:
       - web
+    networks:
+      - frontnet
+networks:
+    frontnet:
+    backnet:

@@ -5,15 +5,18 @@ services:
     restart: always
     volumes:
       - ./django:/code
+      - ./staticfiles/:/code/staticfiles
     ports:
-        - "8000:8000"
+      - "8000:8000"
     networks:
       - backnet
       - frontnet
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn --bind :8000 app.wsgi:application
   proxy:
     build: proxy
     restart: always
+    volumes:
+      - ./staticfiles/:/code/staticfiles
     ports:
       - "80:80"
     depends_on:
@@ -21,5 +24,5 @@ services:
     networks:
       - frontnet
 networks:
-    frontnet:
-    backnet:
+  frontnet:
+  backnet:

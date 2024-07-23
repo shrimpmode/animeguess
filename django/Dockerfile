@@ -2,6 +2,7 @@ FROM python:3.10-alpine
 
 RUN mkdir /code
 RUN mkdir /code/staticfiles
+RUN chmod -R 755 /code/staticfiles
 
 WORKDIR /code
 

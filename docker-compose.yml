@@ -11,6 +11,8 @@ services:
     networks:
       - backnet
       - frontnet
+    env_file:
+      - ./django/.env
     command: gunicorn --bind :8000 app.wsgi:application
   proxy:
     build: proxy
